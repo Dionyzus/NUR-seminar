@@ -1,0 +1,14 @@
+{{ form_start(form, {attr: attr|default({})}) }}
+    {{ form_widget(form) }}
+
+<div class="section">
+    <button type="submit" class="{{ button_css|default("btn btn-primary") }}">
+        <i class="fa fa-save" aria-hidden="true"></i> {{ 'potvrdi' }}
+    </button>
+
+    <a href="{{ path('app_index') }}" class="btn btn-primary btn-info">
+        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'pocetna' }}
+    </a>
+</div>
+
+{{ form_end(form) }}

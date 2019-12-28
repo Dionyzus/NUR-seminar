@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'hw_sw_index' %}
+
+{% block main %}
+    <br>
+    <h3>Hardver i instalirani softver</h3>
+    <table class="table table-bordered table-striped table-condensed">
+        <thead class="alert-info">
+        <tr>
+            <th scope="col">Broj inventara</th>
+            <th scope="col">Naziv hardvera</th>
+            <th scope="col">Naziv softvera</th>
+            <th scope="col">Opis softvera</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set previous = false %}
+        {% set current = false %}
+        {% set count = 0 %}
+        {% set inc = 0 %}
+        {% for hardwareSoftware in hardwareSoftwares %}
+            {% set previous = hardwareSoftware.brojInventara %}
+            {% if previous!=current and count==1 %}
+                {% set count=0 %}
+            {% endif %}
+            {% if count==1 %}
+                <tr>
+                    <th scope="col">{{ "" }}</th>
+                    <th scope="col">{{ "" }}</th>
+                    <th scope="col">{{ softwares[inc].nazivSoftware }}</th>
+                    <th scope="col">{{ softwares[inc].opis }}</th>
+                </tr>
+            {% endif %}
+            {% if count!= 1 %}
+                <tr>
+                    <th scope="col">{{ hardwareSoftware.brojInventara }}</th>
+                    {% if hardwares[inc].nazivHardware is defined and hardwares[inc].nazivHardware is not null %}
+                        <th scope="col">{{ hardwares[inc].nazivHardware }}</th>
+                    {% endif %}
+                    <th scope="col">{{ softwares[inc].nazivSoftware }}</th>
+                    <th scope="col">{{ softwares[inc].opis }}</th>
+                    <td class="text-right">
+                        <div class="item-actions">
+                            <a href="{{ path('hw_sw_show', {brojInventara: hardwareSoftware.brojInventara}) }}"
+                               class="btn btn-sm btn-info">
+                                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'opcije' }}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% set count=1 %}
+            {% endif %}
+            {% set current = hardwareSoftware.brojInventara %}
+            {% set inc = inc + 1 %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

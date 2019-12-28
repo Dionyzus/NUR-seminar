@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'lok_spec_edit' %}
+
+{% block main %}
+    <br>
+    {% form_theme form 'bootstrap_4_layout.html.twig' %}
+    <div class="alert alert-info" role="alert">{{ 'Azuriraj specijalizacije na lokaciji:' }} {{ lokacijaSpecijalizacija.ucionicaBroj }} </div>
+    {{ form_start(form) }}
+    {{ form_row(form.specijalizacijaId) }}
+
+    <button type="submit" class="btn btn-sm btn-primary">
+        <i class="fa fa-save" aria-hidden="true"></i> {{ 'potvrdi' }}
+    </button>
+    <a href="{{ path('lok_spec_show', {ucionicaBroj: lokacijaSpecijalizacija.ucionicaBroj}) }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'povratak' }}
+    </a>
+    {{ form_end(form) }}
+{% endblock %}
+

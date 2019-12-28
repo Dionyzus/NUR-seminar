@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block body_id 'vlasnik_index' %}
+
+{% block body %}
+    <h1>{{ 'Vlasnici' }}</h1>
+
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Id" }}</th>
+            <th scope="col">{{ "Naziv Vlasnika" }}</th>
+            <th scope="col">{{ "Kontakt broj" }}</th>
+            <th scope="col">{{ "E-mail" }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for vlasnik in vlasnici %}
+            <tr>
+                <td>{{ vlasnik.vlasnikId }}</td>
+                <td>{{ vlasnik.nazivVlasnika }}</td>
+                <td>{{ vlasnik.kontaktBroj }}</td>
+                <td>{{ vlasnik.email }}</td>
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a href="{{ path('vlasnik_show', {vlasnikId: vlasnik.vlasnikId}) }}" class="btn btn-sm btn-info">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'prikazi' }}
+                        </a>
+                        <a href="{{ path('vlasnik_edit', {vlasnikId: vlasnik.vlasnikId}) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">{{ 'Nema vlasnika!' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="section actions">
+        <a href="{{ path('vlasnik_novi') }}" class="btn btn-bg btn-dark">
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'dodaj novog' }}
+        </a>
+    </div>
+    <br>
+{% endblock %}

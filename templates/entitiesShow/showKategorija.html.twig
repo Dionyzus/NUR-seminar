@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'kategorija_show' %}
+
+{% block body %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+        <h2>Pregled kategorija id-a: {{ kategorija.kategorijaId }}</h2>
+    </div>
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Naziv kategorije" }}</th>
+            <th scope="col">{{ "Opis kategorije" }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ kategorija.nazivKategorije}}</td>
+            <td>{{ kategorija.opisKategorije }}</td>
+            <td class="text-right">
+                <div class="item-actions">
+                    <a href="{{ path('kategorija_edit', {kategorijaId: kategorija.kategorijaId}) }}" class="btn btn-sm btn-success">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                    </a>
+                </div>
+                <br>
+                <div class="section">
+                    {{ include('entitiesActions/deleteKategorija.html.twig', {kategorija: kategorija}, with_context = false) }}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

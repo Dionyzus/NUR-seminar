@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'hw_sw_edit' %}
+
+{% block main %}
+    <br>
+    {% form_theme form 'bootstrap_4_layout.html.twig' %}
+    <div class="alert alert-info" role="alert">{{ 'Azuriraj softver na hardveru:' }} {{ hardware.nazivHardware }} </div>
+    {{ form_start(form) }}
+    {{ form_row(form.sifraSoftware) }}
+    {{ form_row(form.datumAktivacije) }}
+    {{ form_row(form.datumIstekaLicence) }}
+    <button type="submit" class="btn btn-sm btn-primary">
+        <i class="fa fa-save" aria-hidden="true"></i> {{ 'potvrdi' }}
+    </button>
+    <a href="{{ path('hw_sw_show', {brojInventara: hardwareSoftware.brojInventara}) }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'povratak' }}
+    </a>
+    {{ form_end(form) }}
+{% endblock %}
+

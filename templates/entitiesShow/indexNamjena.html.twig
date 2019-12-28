@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% block body_id 'namjena_index' %}
+
+{% block body %}
+    <h1>{{ 'Namjene' }}</h1>
+
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Id" }}</th>
+            <th scope="col">{{ "Naziv Namjene" }}</th>
+            <th scope="col">{{ "Opis Namjene" }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for namjena in namjene %}
+            <tr>
+                <td>{{ namjena.namjenaId }}</td>
+                <td>{{ namjena.nazivNamjene }}</td>
+                <td>{{ namjena.opisNamjene }}</td>
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a href="{{ path('namjena_show', {namjenaId: namjena.namjenaId}) }}" class="btn btn-sm btn-info">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'prikazi' }}
+                        </a>
+                        <a href="{{ path('namjena_edit', {namjenaId: namjena.namjenaId}) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">{{ 'Nema namjena!' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="section actions">
+        <a href="{{ path('namjena_nova') }}" class="btn btn-bg btn-dark">
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'dodaj novu' }}
+        </a>
+    </div>
+    <br>
+{% endblock %}

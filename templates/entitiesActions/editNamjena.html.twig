@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'namjena_edit' %}
+
+{% block main %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+        <h2>Ažuriraj namjenu id-a: {{ namjena.namjenaId }}</h2>
+    </div>
+
+    {{ include('default/_form.html.twig', {
+        form: form,
+        button_label: 'action.save'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+{% endblock %}
+{% block sidebar %}
+    <p><br></p>
+    <div class="alert alert-info" role="alert">Omogućava uređivanje izabranog entiteta. Klikom na potvrdi, propagiraju se promjene.</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'vlasnik_show' %}
+
+{% block body %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+        <h2>Pregled vlasnika id-a: {{ vlasnik.vlasnikId }}</h2>
+    </div>
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Naziv vlasnika" }}</th>
+            <th scope="col">{{ "Kontakt broj" }}</th>
+            <th scope="col">{{ "E-mail" }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ vlasnik.nazivVlasnika }}</td>
+            <td>{{ vlasnik.kontaktBroj }}</td>
+            <td>{{ vlasnik.email }}</td>
+            <td class="text-right">
+                <div class="item-actions">
+                    <a href="{{ path('vlasnik_edit', {vlasnikId: vlasnik.vlasnikId}) }}" class="btn btn-sm btn-success">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                    </a>
+                </div>
+                <br>
+                <div class="section">
+                    {{ include('entitiesActions/deleteVlasnik.html.twig', {vlasnik: vlasnik}, with_context = false) }}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

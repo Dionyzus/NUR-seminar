@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'hardware_show' %}
+
+{% block body %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+        <h2>Pregled hardvera šifre: {{ hardware.brojInventara }}</h2>
+    </div>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <table class="table table-striped table-dark">
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Naziv hardvera" }}</th>
+            <td>{{ hardware.nazivHardware }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Kontakt osoba" }}</th>
+            <td>{{ hardware.kontaktOsoba }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Model i godina proizvodnje" }}</th>
+            <td>{{ hardware.modelIGodinaProizvodnje }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Opis" }}</th>
+            <td>{{ hardware.opis }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Datum nabave" }}</th>
+            <td>{{ hardware.datumNabave|date('Y-m-d') }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Vijek trajanja" }}</th>
+            <td>{{ hardware.vijekTrajanja }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Datum isteka jamstva" }}</th>
+            <td>{{ hardware.datumIstekaJamstva|date('Y-m-d') }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Vrijednost" }}</th>
+            <td>{{ hardware.vrijednost }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Trenutna vrijednost" }}</th>
+            <td>{{ hardware.trenutnaVrijednost }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Vlasništvo" }}</th>
+            <td>{{ hardware.vlasnistvo.nazivVlasnika }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Ustanova" }}</th>
+            <td>{{ hardware.ustanova.nazivUstanove }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Organizacija" }}</th>
+            <td>{{ hardware.organizacija.nazivOrganizacije }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Kategorija" }}</th>
+            <td>{{ hardware.kategorija.nazivKategorije }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row">{{ "Lokacija" }}</th>
+            <td>{{ hardware.brojUcionice.brojUcionice }}</td>
+        </tr>
+        <tr>
+            <th class="small text-muted pr-2" scope="row"><b>{{ "Opcije" }}</b></th>
+            <td class="text-center">
+                    <p><a href="{{ path('hardware_edit', {brojInventara: hardware.brojInventara}) }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                    </a>
+                    {{ include('entitiesActions/deleteHardware.html.twig', {hardware: hardware}, with_context = false) }}</p>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

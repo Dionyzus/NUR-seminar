@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'namjena_show' %}
+
+{% block body %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+        <h2>Pregled namjene id-a: {{ namjena.namjenaId }}</h2>
+    </div>
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Naziv namjene" }}</th>
+            <th scope="col">{{ "Opis namjene" }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ namjena.nazivNamjene}}</td>
+            <td>{{ namjena.opisNamjene }}</td>
+            <td class="text-right">
+                <div class="item-actions">
+                    <a href="{{ path('lok_spec_edit', {namjenaId: namjena.namjenaId}) }}" class="btn btn-sm btn-success">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                    </a>
+                </div>
+                <br>
+                <div class="section">
+                    {{ include('entitiesActions/deleteNamjena.html.twig', {namjena: namjena}, with_context = false) }}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

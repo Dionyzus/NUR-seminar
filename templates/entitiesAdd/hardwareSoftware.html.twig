@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dodaj sw-hw{% endblock %}
+{% block body %}
+    <br>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h1 class="h3 mb-3 font-weight-normal text-center">Dodaj softver na hardver</h1>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button class="btn btn-primary btn-block">Dodaj</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

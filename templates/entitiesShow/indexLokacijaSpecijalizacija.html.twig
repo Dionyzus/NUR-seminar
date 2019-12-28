@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'lok_spec_index' %}
+
+{% block main %}
+    <br>
+    <h3>Ucionice i njihove specijalizacije</h3>
+    <table class="table table-bordered table-striped table-condensed">
+        <thead class="alert-info">
+        <tr>
+            <th scope="col">Broj ucionice</th>
+            <th scope="col">Naziv specijalizacije</th>
+            <th scope="col">Opis specijalizacije</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set previous = false %}
+        {% set current = false %}
+        {% set count = 0 %}
+        {% set inc = 0 %}
+        {% for lokacijaSpecijalizacija in lokacijaSpecijalizacije %}
+            {% set previous = lokacijaSpecijalizacija.ucionicaBroj %}
+            {% if previous!=current and count==1 %}
+                {% set count=0 %}
+            {% endif %}
+            {% if count==1 %}
+                <tr>
+                    <th scope="col">{{ "" }}</th>
+                    <th scope="col">{{ specijalizacije[inc].nazivSpecijalizacije }}</th>
+                    <th scope="col">{{ specijalizacije[inc].opisSpecijalizacije }}</th>
+                </tr>
+            {% endif %}
+            {% if count!= 1 %}
+                <tr>
+                    <th scope="col">{{ lokacijaSpecijalizacija.ucionicaBroj }}</th>
+                    <th scope="col">{{ specijalizacije[inc].nazivSpecijalizacije }}</th>
+                    <th scope="col">{{ specijalizacije[inc].opisSpecijalizacije }}</th>
+                    <td class="text-right">
+                        <div class="item-actions">
+                            <a href="{{ path('lok_spec_show', {ucionicaBroj: lokacijaSpecijalizacija.ucionicaBroj}) }}"
+                               class="btn btn-sm btn-info">
+                                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'opcije' }}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% set count=1 %}
+            {% endif %}
+            {% set current = lokacijaSpecijalizacija.ucionicaBroj %}
+            {% set inc = inc + 1 %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

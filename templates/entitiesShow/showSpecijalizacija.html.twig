@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'specijalizacija_show' %}
+
+{% block body %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+        <h2>Pregled specijalizacije id-a: {{ specijalizacija.specijalizacijaId }}</h2>
+    </div>
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Naziv specijalizacije" }}</th>
+            <th scope="col">{{ "Opis specijalizacije" }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ specijalizacija.nazivSpecijalizacije }}</td>
+            <td>{{ specijalizacija.opisSpecijalizacije }}</td>
+            <td class="text-right">
+                <div class="item-actions">
+                    <a href="{{ path('specijalizacija_edit', {specijalizacijaId: specijalizacija.specijalizacijaId}) }}" class="btn btn-sm btn-success">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                    </a>
+                </div>
+                <br>
+                <div class="section">
+                    {{ include('entitiesActions/deleteSpecijalizacija.html.twig', {specijalizacija: specijalizacija}, with_context = false) }}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

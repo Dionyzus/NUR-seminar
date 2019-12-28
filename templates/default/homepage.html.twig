@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <br>
+        <h1><b>{{ 'Dobrodosli!' }}</b></h1>
+    </div>
+        <div class="alert alert-light" role="alert">
+            <div class="section">
+                <i>Ovo je web aplikacija koja omogućava pregled opreme odsjeka za stručne studije.<br>
+                        To uključuje pregled hardverske i softverske opreme. Opremu je moguće pretraživati prema
+                        različitim
+                        kriterijima.<br>
+                        U slučaju da se prijavite kao admin, moguće je dodavati nove te izmjenjivati ili brisati već
+                        postojeće podatke.</i>
+            </div>
+        </div>
+
+    <div class="container">
+        <div class="col-sm-6">
+            <div class="jumbotron">
+                <p>Novi korisnik? <b>Registrirajte se!</b></p>
+                <a href="{{ path('app_register') }}" class="btn btn-lg btn-primary">
+                    <i class="fa fa-user-plus" aria-hidden="true"></i> {{ 'register' }}
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="jumbotron">
+                <br>
+                <p>Postojeci korisnik? <b>Prijavite se!</b></p>
+                <a href="{{ path('app_login') }}" class="btn btn-lg btn-primary">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i> {{ 'login' }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

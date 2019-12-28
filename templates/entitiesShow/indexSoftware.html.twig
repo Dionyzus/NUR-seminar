@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% block body_id 'software_index' %}
+
+{% block body %}
+    <h1>{{ 'Softveri' }}</h1>
+
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Naziv softvera" }}</th>
+            <th scope="col">{{ "Vlasništvo" }}</th>
+            <th scope="col">{{ "Organizacija" }}</th>
+            <th scope="col">{{ "Broj licenci" }}</th>
+            <th scope="col">{{ "Namjena" }}</th>
+
+            {#<th scope="col">{{ "Kontakt osoba" }}</th>
+            <th scope="col">{{ "Trajanje licence" }}</th>
+            <th scope="col">{{ "Datum nabave" }}</th>
+            <th scope="col">{{ "Šifra softvera" }}</th>
+            <th scope="col">{{ "Vrijednost" }}</th>
+            <th scope="col">{{ "Opis" }}</th>
+            <th scope="col">{{ "Ustanova" }}</th>#}
+        </tr>
+        </thead>
+        <tbody>
+        {% for software in softwares %}
+            <tr>
+                <td>{{ software.nazivSoftware }}</td>
+                <td>{{ software.vlasnistvo.nazivVlasnika }}</td>
+                <td>{{ software.organizacija.nazivOrganizacije }}</td>
+                <td>{{ software.brojLicenci }}</td>
+                <td>{{ software.namjena.nazivNamjene }}</td>
+
+                {#<td>{{ software.kontaktOsoba }}</td>
+                <td>{{ software.trajanjeLicence }}</td>
+                <td>{{ software.sifraSoftware }}</td>
+                <td>{{ software.datumNabave|date('Y-m-d') }}</td>
+                <td>{{ software.vrijednost }}</td>
+                <td>{{ software.opis }}</td>
+                <td>{{ software.ustanova.nazivUstanove }}</td>#}
+
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a href="{{ path('software_show', {sifraSoftware: software.sifraSoftware}) }}" class="btn btn-sm btn-info">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'prikazi' }}
+                        </a>
+                        <a href="{{ path('software_edit', {sifraSoftware: software.sifraSoftware}) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">{{ 'Nema softvera!' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="section actions">
+        <a href="{{ path('software_novi') }}" class="btn btn-bg btn-dark">
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'dodaj novi' }}
+        </a>
+    </div>
+    <br>
+{% endblock %}

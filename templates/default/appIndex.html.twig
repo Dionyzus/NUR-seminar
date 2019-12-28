@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'app_index' %}
+
+{% block main %}
+    <div class="page-header">
+        <br>
+        <div class="alert alert-primary" role="alert">
+            <h3>{{ 'Welcome! ' }}<b>{{ user.email }}</b></h3>
+        </div>
+    </div>
+    <table class="table table-striped table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Entiteti</th>
+            <th scope="col">Dodaj novi element</th>
+            <th scope="col">Prikazi vrijednosti</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">Lokacija</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('lokacija_nova') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('lokacija_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Vlasnik</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('vlasnik_novi') }}">
+                    <i class="fa fa-list-ul" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('vlasnik_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Softver</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('software_novi') }}">
+                    <i class="fa fa-list" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('software_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Hardver</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('hardware_novi') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('hardware_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Kategorija</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('kategorija_nova') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('kategorija_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Ustanova</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('ustanova_nova') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('ustanova_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Organizacija</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('ustanova_nova') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('organizacija_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Namjena</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('namjena_nova') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('namjena_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Specijalizacija</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_nova') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Hardver-Softver</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('hardware_software') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Instaliraj' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('hw_sw_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        <tr>
+            <th scope="row">Lokacija-Specijalizacija</th>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('lokacija_specijalizacija') }}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Pridruzi' }}
+                </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{ path('lok_spec_index') }}">
+                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                </a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+{% endblock %}
+
+    {% block sidebar %}
+        <p><br></p>
+        {{ parent() }}
+
+    {% endblock %}
+
