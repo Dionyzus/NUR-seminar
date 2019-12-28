@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Hardware;
+use App\Repository\HardwareRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller;
 
 class MainController extends AbstractController
 {
@@ -33,4 +37,18 @@ class MainController extends AbstractController
     {
         return $this->render('default/homepage.html.twig');
     }
+
+
+    public function searchByLokacija(Request $request)
+    {
+        $qb = $this->getDoctrine()
+            ->getRepository(HardwareRepository::class)
+            ->findBy([Hardware::class]);
+
+        $hardware = $this->get('pagination_factory')
+            ->createCollection($qb, $request, 'hardware_collection');
+
+        return $this->render('entitiesShow/indexHardware.html.twig',['hardware' => $hardware]);
+    }
+
 }

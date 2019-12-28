@@ -21,6 +21,7 @@ Encore
     // caching strategies. Use Encore.isProduction() to enable it only for production.
     .enableVersioning(false)
     .addEntry('app', './assets/js/app.js')
+	.addStyleEntry('css/app', './assets/scss/app.scss')
     .addEntry('login', './assets/js/login.js')
     .addEntry('admin', './assets/js/admin.js')
     .addEntry('search', './assets/js/search.js')

@@ -22,23 +22,20 @@ class HardwareRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Hardware::class);
     }
-
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+      * @return Hardware[] Returns an array of Hardware objects
+      */
+    public function findByLokacija($value)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.brojUcionice = :val')
             ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
+            ->orderBy('h.brojInventara', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?User

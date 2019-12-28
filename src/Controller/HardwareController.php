@@ -12,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 
 class HardwareController extends AbstractController
 {
@@ -106,7 +105,10 @@ class HardwareController extends AbstractController
      */
     public function index(Request $request,HardwareRepository $hardwareRepo)
     {
+        $hardware = $hardwareRepo->findByLokacija('100');
+
         $hardwares=$hardwareRepo->findAll();
-        return $this->render('entitiesShow/indexHardware.html.twig',['hardwares' => $hardwares]);
+        return $this->render('entitiesShow/indexHardware.html.twig',['hardwares' => $hardwares,'hardware'=>$hardware]);
     }
+
 }
