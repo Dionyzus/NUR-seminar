@@ -4,7 +4,9 @@ namespace App\Controller;
 use App\Entity\Lokacija;
 use App\Entity\Organizacija;
 use App\Form\OrganizacijaFormType;
+use App\Repository\NamjenaRepository;
 use App\Repository\OrganizacijaRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,9 +74,9 @@ class OrganizacijaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Organizacija uspješno ažurirana!');
 
-            return $this->redirectToRoute('organizacija_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editOrganizacija.html.twig', [
@@ -96,17 +98,25 @@ class OrganizacijaController extends AbstractController
         $em->remove($organizacija);
         $em->flush();
 
-        $this->addFlash('success', 'Organizacija deleted successfully');
+        $this->addFlash('success', 'Organizacija uspješno izbrisana');
 
-        return $this->redirectToRoute('organizacija_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/organizacija/index",name="organizacija_index")
      */
-    public function index(Request $request,OrganizacijaRepository $organizacijaRepo)
+    public function index(Request $request,OrganizacijaRepository $organizacijaRepository,PaginatorInterface $paginator)
     {
-        $organizacije=$organizacijaRepo->findAll();
-        return $this->render('entitiesShow/indexOrganizacija.html.twig',['organizacije' => $organizacije]);
+        $q = $request->query->get('q');
+        $queryBuilder = $organizacijaRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexOrganizacija.html.twig',['pagination'=>$pagination]);
     }
 }

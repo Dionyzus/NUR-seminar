@@ -5,6 +5,8 @@ use App\Entity\Lokacija;
 use App\Entity\Ustanova;
 use App\Form\UstanovaFormType;
 use App\Repository\UstanovaRepository;
+use App\Repository\VlasnikRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,9 +74,9 @@ class UstanovaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Ustanova uspješno ažurirana!');
 
-            return $this->redirectToRoute('ustanova_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editUstanova.html.twig', [
@@ -96,17 +98,25 @@ class UstanovaController extends AbstractController
         $em->remove($ustanova);
         $em->flush();
 
-        $this->addFlash('success', 'Ustanova deleted successfully');
+        $this->addFlash('success', 'Ustanova uspješno izbrisana!');
 
-        return $this->redirectToRoute('ustanova_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/ustanova/index",name="ustanova_index")
      */
-    public function index(Request $request,UstanovaRepository $ustanovaRepo)
+    public function index(Request $request,UstanovaRepository $ustanovaRepository,PaginatorInterface $paginator)
     {
-        $ustanove=$ustanovaRepo->findAll();
-        return $this->render('entitiesShow/indexUstanova.html.twig',['ustanove' => $ustanove]);
+        $q = $request->query->get('q');
+        $queryBuilder = $ustanovaRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexUstanova.html.twig',['pagination'=>$pagination]);
     }
 }

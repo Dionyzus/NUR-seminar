@@ -36,7 +36,7 @@ class LokacijaSpecijalizacijaController extends AbstractController
             $em->persist($lok_spec);
             $em->flush();
 
-            $this->addFlash('success', 'Specijalizacija uspješno dodana lokaciji!');
+            $this->addFlash('success', 'Specijalizacija uspješno pridružena lokaciji!');
 
             return $this->redirectToRoute('app_index');
         }
@@ -96,7 +96,9 @@ class LokacijaSpecijalizacijaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('lok_spec_index');
+            $this->addFlash('success', 'Specijalizacija na lokaciji uspješno ažurirana!');
+
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editLokacijaSpecijalizacija.html.twig', [
@@ -121,6 +123,6 @@ class LokacijaSpecijalizacijaController extends AbstractController
 
         $this->addFlash('success', 'Lokacija i sve specijalizacije na istoj izbrisane uspješno!');
 
-        return $this->redirectToRoute('lok_sec_index');
+        return $this->redirectToRoute('app_index');
     }
 }

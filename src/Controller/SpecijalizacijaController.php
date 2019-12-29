@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Entity\Specijalizacija;
 use App\Form\SpecijalizacijaFormType;
 use App\Repository\SpecijalizacijaRepository;
+use App\Repository\VlasnikRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,9 +73,9 @@ class SpecijalizacijaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Specijalizacija uspješno ažurirana!');
 
-            return $this->redirectToRoute('specijalizacija_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editSpecijalizacija.html.twig', [
@@ -95,17 +97,25 @@ class SpecijalizacijaController extends AbstractController
         $em->remove($specijalizacija);
         $em->flush();
 
-        $this->addFlash('success', 'Specijalizacija deleted successfully');
+        $this->addFlash('success', 'Specijalizacija uspješno izbrisana!');
 
-        return $this->redirectToRoute('specijalizacija_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/specijalizacija/index",name="specijalizacija_index")
      */
-    public function index(Request $request,SpecijalizacijaRepository $specijalizacijaRepo)
+    public function index(Request $request,SpecijalizacijaRepository $specijalizacijaRepository,PaginatorInterface $paginator)
     {
-        $specijalizacije=$specijalizacijaRepo->findAll();
-        return $this->render('entitiesShow/indexSpecijalizacija.html.twig',['specijalizacije' => $specijalizacije]);
+        $q = $request->query->get('q');
+        $queryBuilder = $specijalizacijaRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexSpecijalizacija.html.twig',['pagination'=>$pagination]);
     }
 }

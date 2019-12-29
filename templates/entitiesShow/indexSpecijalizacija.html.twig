@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body_id 'specijalizacija_index' %}
 
-{% block body %}
-    <h1>{{ 'Specijalizacije' }}</h1>
+{% block main %}
+    <h1>{{ 'Specijalizacije' }}({{ pagination.getTotalItemCount }})</h1>
 
     <table class="table table-striped table-middle-aligned">
         <thead>
@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for specijalizacija in specijalizacije %}
+        {% for specijalizacija in pagination %}
             <tr>
                 <td>{{ specijalizacija.specijalizacijaId }}</td>
                 <td>{{ specijalizacija.nazivSpecijalizacije }}</td>
@@ -42,4 +42,28 @@
         </a>
     </div>
     <br>
+{% endblock %}
+
+{% block sidebar %}
+    <br>
+    <div class="alert alert-info" role="alert">
+        <h7><b>Pretraživanje</b></h7>
+    </div>
+    <form>
+        <div class="input-group mb-3">
+            <input type="text"
+                   name="q"
+                   class="form-control"
+                   value="{{ app.request.query.get('q') }}"
+                   placeholder="Search..."
+            >
+            <div class="input-group-append">
+                <button type="submit"
+                        class="btn btn-outline-primary">
+                    <span class="fa fa-search"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+
 {% endblock %}

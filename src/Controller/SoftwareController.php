@@ -3,7 +3,9 @@ namespace App\Controller;
 
 use App\Entity\Software;
 use App\Form\SoftwareFormType;
+use App\Repository\LokacijaRepository;
 use App\Repository\SoftwareRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,9 +73,9 @@ class SoftwareController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Softver uspješno ažuriran!');
 
-            return $this->redirectToRoute('software_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editSoftware.html.twig', [
@@ -95,17 +97,25 @@ class SoftwareController extends AbstractController
         $em->remove($software);
         $em->flush();
 
-        $this->addFlash('success', 'Software deleted successfully');
+        $this->addFlash('success', 'Software uspješno izbrisan');
 
-        return $this->redirectToRoute('software_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/software/index",name="software_index")
      */
-    public function index(Request $request,SoftwareRepository $softwareRepo)
+    public function index(Request $request,SoftwareRepository $softwareRepository,PaginatorInterface $paginator)
     {
-        $softwares=$softwareRepo->findAll();
-        return $this->render('entitiesShow/indexSoftware.html.twig',['softwares' => $softwares]);
+        $q = $request->query->get('q');
+        $queryBuilder = $softwareRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexSoftware.html.twig',['pagination'=>$pagination]);
     }
 }

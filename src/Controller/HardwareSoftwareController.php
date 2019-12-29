@@ -108,7 +108,9 @@ class HardwareSoftwareController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('hw_sw_index');
+            $this->addFlash('success', 'Softver instaliran na hardveru uspješno!');
+
+            return $this->redirectToRoute('app_index');
         }
 
         $id = $hardwareSoftware->getBrojInventara();
@@ -135,8 +137,8 @@ class HardwareSoftwareController extends AbstractController
         $em->remove($hardwareSoftware);
         $em->flush();
 
-        $this->addFlash('success', 'Hardver i svi softveri na istoj izbrisane uspješno!');
+        $this->addFlash('success', 'Hardver i svi softveri na istoj izbrisani uspješno!');
 
-        return $this->redirectToRoute('hw_sw_index');
+        return $this->redirectToRoute('app_index');
     }
 }

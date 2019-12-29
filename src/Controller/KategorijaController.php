@@ -3,7 +3,9 @@ namespace App\Controller;
 
 use App\Entity\Kategorija;
 use App\Form\KategorijaFormType;
+use App\Repository\HardwareRepository;
 use App\Repository\KategorijaRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,15 +48,6 @@ class KategorijaController extends AbstractController
     }
 
     /**
-     * @Route("/app/kategorija/index",name="kategorija_index")
-     */
-    public function index(Request $request,KategorijaRepository $kategorijaRepo)
-    {
-        $kategorije=$kategorijaRepo->findAll();
-        return $this->render('entitiesShow/indexKategorija.html.twig',['kategorije' => $kategorije]);
-    }
-
-    /**
      * Finds and displays a Kategorija entity.
      * @Route("/app/kategorija/{kategorijaId<\d+>}", methods={"GET"}, name="kategorija_show")
      */
@@ -81,9 +74,9 @@ class KategorijaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Kategorija uspješno ažurirana!');
 
-            return $this->redirectToRoute('kategorija_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editKategorija.html.twig', [
@@ -105,8 +98,25 @@ class KategorijaController extends AbstractController
         $em->remove($kategorija);
         $em->flush();
 
-        $this->addFlash('success', 'Kategorija deleted successfully');
+        $this->addFlash('success', 'Kategorija uspješno izbrisana!');
 
-        return $this->redirectToRoute('kategorija_index');
+        return $this->redirectToRoute('app_index');
+    }
+
+    /**
+     * @Route("/app/kategorija/index",name="kategorija_index")
+     */
+    public function index(Request $request,KategorijaRepository $kategorijaRepository,PaginatorInterface $paginator)
+    {
+        $q = $request->query->get('q');
+        $queryBuilder = $kategorijaRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexKategorija.html.twig',['pagination'=>$pagination]);
     }
 }

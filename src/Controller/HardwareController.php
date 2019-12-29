@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class HardwareController extends AbstractController
 {
@@ -71,9 +72,9 @@ class HardwareController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Hardver je ažuriran!');
 
-            return $this->redirectToRoute('hardware_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editHardware.html.twig', [
@@ -95,20 +96,27 @@ class HardwareController extends AbstractController
         $em->remove($hardware);
         $em->flush();
 
-        $this->addFlash('success', 'Hardware deleted successfully');
+        $this->addFlash('success', 'Hardware izbrisan uspješno!');
 
-        return $this->redirectToRoute('hardware_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/hardware/index",name="hardware_index")
      */
-    public function index(Request $request,HardwareRepository $hardwareRepo)
+    public function index(Request $request,HardwareRepository $hardwareRepo,PaginatorInterface $paginator)
     {
-        $hardware = $hardwareRepo->findByLokacija('100');
+        $q = $request->query->get('q');
+        $queryBuilder = $hardwareRepo->getWithSearchQueryBuilder($q);
 
-        $hardwares=$hardwareRepo->findAll();
-        return $this->render('entitiesShow/indexHardware.html.twig',['hardwares' => $hardwares,'hardware'=>$hardware]);
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexHardware.html.twig',['pagination'=>$pagination]);
     }
+
 
 }

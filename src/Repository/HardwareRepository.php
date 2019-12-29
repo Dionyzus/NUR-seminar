@@ -6,6 +6,7 @@ namespace App\Repository;
 use App\Entity\Hardware;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,30 +23,25 @@ class HardwareRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Hardware::class);
     }
+
     /**
-      * @return Hardware[] Returns an array of Hardware objects
-      */
-    public function findByLokacija($value)
+    * @param string|null $term
+    */
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
     {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.brojUcionice = :val')
-            ->setParameter('val', $value)
-            ->orderBy('h.brojInventara', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('h')
+            ->innerJoin('h.brojUcionice', 'l')
+            ->innerJoin('h.vlasnistvo', 'v')
+            ->innerJoin('h.organizacija', 'o')
+            ->innerJoin('h.namjena', 'n');
+        if ($term) {
+            $qb->andWhere('h.nazivHardware LIKE :term OR l.brojUcionice LIKE :term OR v.nazivVlasnika LIKE :term OR o.nazivOrganizacije LIKE :term OR n.nazivNamjene LIKE :term')
+                ->setParameter('term', '%' . $term . '%')
+            ;
+        }
+        return $qb
+            ->orderBy('h.nazivHardware', 'DESC')
+            ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

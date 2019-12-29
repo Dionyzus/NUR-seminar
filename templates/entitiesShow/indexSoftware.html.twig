@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body_id 'software_index' %}
 
-{% block body %}
-    <h1>{{ 'Softveri' }}</h1>
+{% block main %}
+    <h1>{{ 'Softveri' }} ({{ pagination.getTotalItemCount }})</h1>
 
     <table class="table table-striped table-middle-aligned">
         <thead>
@@ -23,7 +23,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for software in softwares %}
+        {% for software in pagination %}
             <tr>
                 <td>{{ software.nazivSoftware }}</td>
                 <td>{{ software.vlasnistvo.nazivVlasnika }}</td>
@@ -63,4 +63,28 @@
         </a>
     </div>
     <br>
+{% endblock %}
+
+{% block sidebar %}
+    <br>
+    <div class="alert alert-info" role="alert">
+        <h7><b>Pretraživanje</b></h7>
+    </div>
+    <form>
+        <div class="input-group mb-3">
+            <input type="text"
+                   name="q"
+                   class="form-control"
+                   value="{{ app.request.query.get('q') }}"
+                   placeholder="Search..."
+            >
+            <div class="input-group-append">
+                <button type="submit"
+                        class="btn btn-outline-primary">
+                    <span class="fa fa-search"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+
 {% endblock %}

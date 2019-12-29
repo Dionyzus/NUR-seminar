@@ -6,7 +6,9 @@ use App\Entity\Organizacija;
 use App\Entity\Namjena;
 use App\Entity\Ustanova;
 use App\Form\LokacijaFormType;
+use App\Repository\HardwareRepository;
 use App\Repository\LokacijaRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,15 +67,6 @@ class LokacijaController extends AbstractController
     }
 
     /**
-     * @Route("/app/lokacija/index",name="lokacija_index")
-     */
-    public function index(LokacijaRepository $lokacijaRepo)
-    {
-        $lokacije=$lokacijaRepo->findAll();
-        return $this->render('entitiesShow/indexLokacija.html.twig',['lokacije' => $lokacije]);
-    }
-
-    /**
      * Deletes a Lokacija entity.
      * @Route("/app/lokacija/{brojUcionice}/delete", methods={"GET", "POST"}, name="lokacija_delete")
      */
@@ -87,9 +80,9 @@ class LokacijaController extends AbstractController
         $em->remove($lokacija);
         $em->flush();
 
-        $this->addFlash('success', 'Lokacija deleted successfully');
+        $this->addFlash('success', 'Lokacija uspješno izbrisana');
 
-        return $this->redirectToRoute('lokacija_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
@@ -104,9 +97,9 @@ class LokacijaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Lokacija uspješno ažurirana!');
 
-            return $this->redirectToRoute('lokacija_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editLokacija.html.twig', [
@@ -115,4 +108,20 @@ class LokacijaController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/app/lokacija/index",name="lokacija_index")
+     */
+    public function index(Request $request,LokacijaRepository $lokacijaRepository,PaginatorInterface $paginator)
+    {
+        $q = $request->query->get('q');
+        $queryBuilder = $lokacijaRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexLokacija.html.twig',['pagination'=>$pagination]);
+    }
 }

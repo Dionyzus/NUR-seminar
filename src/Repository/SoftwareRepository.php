@@ -6,6 +6,7 @@ namespace App\Repository;
 use App\Entity\Software;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,6 +24,24 @@ class SoftwareRepository extends ServiceEntityRepository
         parent::__construct($registry, Software::class);
     }
 
+    /**
+     * @param string|null $term
+     */
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->innerJoin('s.vlasnistvo', 'v')
+            ->innerJoin('s.organizacija', 'o')
+            ->innerJoin('s.namjena', 'n');
+        if ($term) {
+            $qb->andWhere('s.nazivSoftware LIKE :term OR s.brojLicenci LIKE :term OR v.nazivVlasnika LIKE :term OR o.nazivOrganizacije LIKE :term OR n.nazivNamjene LIKE :term')
+                ->setParameter('term', '%' . $term . '%')
+            ;
+        }
+        return $qb
+            ->orderBy('s.nazivSoftware', 'DESC')
+            ;
+    }
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

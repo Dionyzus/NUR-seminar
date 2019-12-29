@@ -4,7 +4,9 @@ namespace App\Controller;
 use App\Entity\Namjena;
 use App\Entity\Lokacija;
 use App\Form\NamjenaFormType;
+use App\Repository\KategorijaRepository;
 use App\Repository\NamjenaRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,9 +74,9 @@ class NamjenaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Namjena uspješno ažurirana!');
 
-            return $this->redirectToRoute('namjena_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editNamjena.html.twig', [
@@ -96,17 +98,25 @@ class NamjenaController extends AbstractController
         $em->remove($namjena);
         $em->flush();
 
-        $this->addFlash('success', 'Namjena deleted successfully');
+        $this->addFlash('success', 'Namjena uspješno izbrisana!');
 
-        return $this->redirectToRoute('namjena_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/namjena/index",name="namjena_index")
      */
-    public function index(Request $request,NamjenaRepository $namjenaRepo)
+    public function index(Request $request,NamjenaRepository $namjenaRepository,PaginatorInterface $paginator)
     {
-        $namjene=$namjenaRepo->findAll();
-        return $this->render('entitiesShow/indexNamjena.html.twig',['namjene' => $namjene]);
+        $q = $request->query->get('q');
+        $queryBuilder = $namjenaRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexNamjena.html.twig',['pagination'=>$pagination]);
     }
 }

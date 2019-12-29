@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Lokacija;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,6 +21,25 @@ class LokacijaRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Lokacija::class);
+    }
+
+    /**
+     * @param string|null $term
+     */
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->innerJoin('l.ustanova', 'u')
+            ->innerJoin('l.organizacija', 'o')
+            ->innerJoin('l.namjena', 'n');
+        if ($term) {
+            $qb->andWhere('l.brojUcionice LIKE :term OR u.nazivUstanove LIKE :term OR o.nazivOrganizacije LIKE :term OR n.nazivNamjene LIKE :term')
+                ->setParameter('term', '%' . $term . '%')
+            ;
+        }
+        return $qb
+            ->orderBy('l.brojUcionice', 'DESC')
+            ;
     }
 
     // /**

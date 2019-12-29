@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Specijalizacija;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,6 +23,22 @@ class SpecijalizacijaRepository extends ServiceEntityRepository
         parent::__construct($registry, Specijalizacija::class);
     }
 
+    /**
+     * @param string|null $term
+     */
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        if ($term) {
+            $qb->andWhere('s.nazivSpecijalizacije LIKE :term')
+                ->setParameter('term', '%' . $term . '%')
+            ;
+        }
+        return $qb
+            ->orderBy('s.nazivSpecijalizacije', 'DESC')
+            ;
+    }
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

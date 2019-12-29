@@ -4,7 +4,9 @@ namespace App\Controller;
 use App\Entity\Vlasnik;
 use App\Entity\User;
 use App\Form\VlasnikFormType;
+use App\Repository\SoftwareRepository;
 use App\Repository\VlasnikRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,9 +74,9 @@ class VlasnikController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'All fields should be filled!');
+            $this->addFlash('success', 'Vlasnik uspješno ažuriran!');
 
-            return $this->redirectToRoute('vlasnik_index');
+            return $this->redirectToRoute('app_index');
         }
 
         return $this->render('entitiesActions/editVlasnik.html.twig', [
@@ -96,17 +98,25 @@ class VlasnikController extends AbstractController
         $em->remove($vlasnik);
         $em->flush();
 
-        $this->addFlash('success', 'Vlasnik deleted successfully');
+        $this->addFlash('success', 'Vlasnik uspješno izbrisan!');
 
-        return $this->redirectToRoute('vlasnik_index');
+        return $this->redirectToRoute('app_index');
     }
 
     /**
      * @Route("/app/vlasnik/index",name="vlasnik_index")
      */
-    public function index(Request $request,VlasnikRepository $vlasnikRepo)
+    public function index(Request $request,VlasnikRepository $vlasnikRepository,PaginatorInterface $paginator)
     {
-        $vlasnici=$vlasnikRepo->findAll();
-        return $this->render('entitiesShow/indexVlasnik.html.twig',['vlasnici' => $vlasnici]);
+        $q = $request->query->get('q');
+        $queryBuilder = $vlasnikRepository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('entitiesShow/indexVlasnik.html.twig',['pagination'=>$pagination]);
     }
 }
