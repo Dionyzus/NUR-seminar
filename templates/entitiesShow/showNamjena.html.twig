@@ -18,6 +18,7 @@
         <tr>
             <td>{{ namjena.nazivNamjene}}</td>
             <td>{{ namjena.opisNamjene }}</td>
+            {% if is_granted('ROLE_ADMIN') %}
             <td class="text-right">
                 <div class="item-actions">
                     <a href="{{ path('lok_spec_edit', {namjenaId: namjena.namjenaId}) }}" class="btn btn-sm btn-success">
@@ -29,6 +30,7 @@
                     {{ include('entitiesActions/deleteNamjena.html.twig', {namjena: namjena}, with_context = false) }}
                 </div>
             </td>
+            {% endif %}
         </tr>
         </tbody>
     </table>

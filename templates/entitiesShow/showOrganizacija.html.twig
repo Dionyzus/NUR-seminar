@@ -18,6 +18,7 @@
         <tr>
             <td>{{ organizacija.nazivOrganizacije }}</td>
             <td>{{ organizacija.opisOrganizacije }}</td>
+            {% if is_granted('ROLE_ADMIN') %}
             <td class="text-right">
                 <div class="item-actions">
                     <a href="{{ path('organizacija_edit', {organizacijaId: organizacija.organizacijaId}) }}" class="btn btn-sm btn-success">
@@ -29,6 +30,7 @@
                     {{ include('entitiesActions/deleteOrganizacija.html.twig', {organizacija: organizacija}, with_context = false) }}
                 </div>
             </td>
+            {% endif %}
         </tr>
         </tbody>
     </table>

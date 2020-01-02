@@ -18,7 +18,6 @@ class HardwareController extends AbstractController
 {
     /**
      * Creates a new Hardware entity.
-     *
      * @Route("/app/hardware/novi", methods={"GET", "POST"}, name="hardware_novi")
      *
      */
@@ -86,12 +85,8 @@ class HardwareController extends AbstractController
      * Deletes a Hardware entity.
      * @Route("/app/hardware/{brojInventara}/delete", methods={"GET", "POST"}, name="hardware_delete")
      */
-    public function delete(Request $request, Hardware $hardware): Response
+    public function delete(Hardware $hardware): Response
     {
-        //if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-        //return $this->redirectToRoute('homepage');
-        //}
-
         $em = $this->getDoctrine()->getManager();
         $em->remove($hardware);
         $em->flush();

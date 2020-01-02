@@ -28,6 +28,15 @@ class LokacijaSpecijalizacijaRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findSpecijalizacijaAssignedToLokacija($lokacija)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.ucionicaBroj = :lokacija')
+            ->setParameter('lokacija', $lokacija)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     public function findBySpecijalizacija($specijalizacija): ?LokacijaSpecijalizacija
     {

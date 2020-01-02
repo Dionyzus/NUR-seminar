@@ -68,10 +68,18 @@
         <tr>
             <th class="small text-muted pr-2" scope="row"><b>{{ "Opcije" }}</b></th>
             <td class="text-center">
-                    <p><a href="{{ path('hardware_edit', {brojInventara: hardware.brojInventara}) }}" class="btn btn-sm btn-primary">
-                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
-                    </a>
-                    {{ include('entitiesActions/deleteHardware.html.twig', {hardware: hardware}, with_context = false) }}</p>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <p><a href="{{ path('hardware_edit', {brojInventara: hardware.brojInventara}) }}"
+                          class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                        </a>
+                        {{ include('entitiesActions/deleteHardware.html.twig', {hardware: hardware}, with_context = false) }}
+                    </p>
+                {% endif %}
+                <a href="{{ path('hw_sw_show', {brojInventara: hardware.brojInventara}) }}"
+                   class="btn btn-sm btn-info">
+                    <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Pregled softvera na hardveru' }}
+                </a>
             </td>
         </tr>
     </table>

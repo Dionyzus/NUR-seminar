@@ -29,14 +29,22 @@ class HardwareSoftwareRepository extends ServiceEntityRepository
     }
 
 
-    public function findBySoftware($software): ?HardwareSoftware
+    public function findSoftwareAssignedToHardware($hardware)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.sifraSoftware = :sifraSoftware')
-            ->setParameter('sifraSoftware', $software)
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.brojInventara = :hardware')
+            ->setParameter('hardware', $hardware)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getResult();
+    }
+
+    public function findBySifraSoftware($sifraSoftware)
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.sifraSoftware = :sifraSoftware')
+            ->setParameter('sifraSoftware', $sifraSoftware)
+            ->getQuery()
+            ->getResult();
     }
 
 }

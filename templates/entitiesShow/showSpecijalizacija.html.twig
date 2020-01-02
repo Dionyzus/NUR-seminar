@@ -18,6 +18,7 @@
         <tr>
             <td>{{ specijalizacija.nazivSpecijalizacije }}</td>
             <td>{{ specijalizacija.opisSpecijalizacije }}</td>
+            {% if is_granted('ROLE_ADMIN') %}
             <td class="text-right">
                 <div class="item-actions">
                     <a href="{{ path('specijalizacija_edit', {specijalizacijaId: specijalizacija.specijalizacijaId}) }}" class="btn btn-sm btn-success">
@@ -29,6 +30,7 @@
                     {{ include('entitiesActions/deleteSpecijalizacija.html.twig', {specijalizacija: specijalizacija}, with_context = false) }}
                 </div>
             </td>
+            {% endif %}
         </tr>
         </tbody>
     </table>

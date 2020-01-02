@@ -50,10 +50,12 @@
                            class="btn btn-sm btn-info">
                             <i class="fa fa-eye" aria-hidden="true"></i> {{ 'prikazi' }}
                         </a>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('hardware_edit', {brojInventara: hardware.brojInventara}) }}"
                            class="btn btn-sm btn-primary">
                             <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
                         </a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -65,11 +67,13 @@
         </tbody>
     </table>
     {{ knp_pagination_render(pagination) }}
+    {% if is_granted('ROLE_ADMIN') %}
     <div class="section actions">
         <a href="{{ path('hardware_novi') }}" class="btn btn-bg btn-dark">
             <i class="fa fa-plus" aria-hidden="true"></i> {{ 'dodaj novi' }}
         </a>
     </div>
+    {% endif %}
     <br>
 {% endblock %}
 

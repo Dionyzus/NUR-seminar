@@ -4,7 +4,7 @@
 
 {% block main %}
     <br>
-    <h3>Ucionice i njihove specijalizacije</h3>
+    <h3>Lokacije i specijalizacije</h3>
     <table class="table table-bordered table-striped table-condensed">
         <thead class="alert-info">
         <tr>
@@ -39,7 +39,7 @@
                         <div class="item-actions">
                             <a href="{{ path('lok_spec_show', {ucionicaBroj: lokacijaSpecijalizacija.ucionicaBroj}) }}"
                                class="btn btn-sm btn-info">
-                                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'opcije' }}
+                                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Detalji' }}
                             </a>
                         </div>
                     </td>
@@ -51,4 +51,5 @@
         {% endfor %}
         </tbody>
     </table>
+
 {% endblock %}

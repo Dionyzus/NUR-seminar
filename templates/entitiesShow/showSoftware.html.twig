@@ -48,6 +48,7 @@
             <th class="small text-muted pr-2" scope="row">{{ "Organizacija" }}</th>
             <td>{{ software.organizacija.nazivOrganizacije }}</td>
         </tr>
+        {% if is_granted('ROLE_ADMIN') %}
         <tr>
             <th class="small text-muted pr-2" scope="row"><b>{{ "Opcije" }}</b></th>
             <td class="text-center">
@@ -57,5 +58,6 @@
                     {{ include('entitiesActions/deleteSoftware.html.twig', {software: software}, with_context = false) }}</p>
             </td>
         </tr>
+        {% endif %}
     </table>
 {% endblock %}

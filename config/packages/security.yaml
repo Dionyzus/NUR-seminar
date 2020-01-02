@@ -45,5 +45,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # matches /admin/users/*
+        - { path: '^/app/.*/index', roles: ROLE_USER }
+        - { path: '^/app/.*/.*/$', roles: ROLE_USER }
+
+        # matches /admin/* except for anything matching the above rule
+        - { path: '^/app/.*/nov.', roles: ROLE_ADMIN }
+        - { path: '^/app/.*/.*/delete', roles: ROLE_ADMIN }
+        - { path: '^/app/.*/.*/edit', roles: ROLE_ADMIN }

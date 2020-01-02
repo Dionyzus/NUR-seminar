@@ -43,5 +43,4 @@ class HardwareRepository extends ServiceEntityRepository
             ->orderBy('h.nazivHardware', 'DESC')
             ;
     }
-
 }

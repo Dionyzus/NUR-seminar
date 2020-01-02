@@ -18,6 +18,7 @@
         <tr>
             <td>{{ kategorija.nazivKategorije}}</td>
             <td>{{ kategorija.opisKategorije }}</td>
+            {% if is_granted('ROLE_ADMIN') %}
             <td class="text-right">
                 <div class="item-actions">
                     <a href="{{ path('kategorija_edit', {kategorijaId: kategorija.kategorijaId}) }}" class="btn btn-sm btn-success">
@@ -29,6 +30,7 @@
                     {{ include('entitiesActions/deleteKategorija.html.twig', {kategorija: kategorija}, with_context = false) }}
                 </div>
             </td>
+            {% endif %}
         </tr>
         </tbody>
     </table>

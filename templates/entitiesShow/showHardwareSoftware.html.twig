@@ -2,10 +2,10 @@
 
 {% block body_id 'hw_sw_show' %}
 
-{% block body %}
+{% block main %}
     <br>
     <div class="alert alert-warning" role="alert">
-        <h2>Pregled softvera na hardveru: {{ hardwareName.nazivHardware }}</h2>
+        <h2>Lista software</h2>
     </div>
     <table class="table table-striped table-middle-aligned">
         <thead>
@@ -23,23 +23,67 @@
                 <td>{{ software.kontaktOsoba }}</td>
                 <td>{{ software.trajanjeLicence }}</td>
                 <td>{{ software.vlasnistvo.nazivVlasnika }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
                 <td class="text-right">
                     <div class="item-actions">
-                        <a href="{{ path('hw_sw_edit', {brojInventara: hardware.brojInventara}) }}" class="btn btn-sm btn-success">
-                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Izmjeni software' }}
+                        <a class="btn btn-primary btn-sm" href="{{ path('software_show', {sifraSoftware: software.sifraSoftware}) }}">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Prikazi' }}
                         </a>
-                        <a class="btn btn-primary btn-sm" href="{{ path('hardware_software') }}">
-                            <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj novi software' }}
-                        </a>
-                    </div>
-                    <br>
-                    <div class="section">
-                        {{ include('entitiesActions/deleteHardwareSoftware.html.twig', {hardware: hardware}, with_context = false) }}
                     </div>
                 </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <h3>{{ 'Stanje softwarea za hardware: ' }}<b>{{  hardware.nazivHardware }}</b></h3>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered table-striped">
+                <thead class="alert-info">
+                <tr>
+                    <th scope="col">Software</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th scope="col">Mogućnosti</th>
+                    {% else %}
+                        <th scope="col">Stanje</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for software in unassignedSoftware %}
+                    <tr>
+                        <td scope="row">{{ software.nazivSoftware}}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('hw_sw_edit', {brojInventara: hardware.brojInventara, sifraSoftware: software}) }}" class="btn btn-success btn-sm">Instaliraj software</a>
+                        </td>
+                        {% else %}
+                            <th scope="col">Neinstaliran</th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                {% set inc = 0 %}
+                {% for software in assignedSoftware %}
+                    <tr>
+                        <td scope="row">{{ nazivi[inc] }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('hw_sw_unassign', {brojInventara: hardware.brojInventara, sifraSoftware: software}) }}" class="btn btn-danger btn-sm">Deinstaliraj software</a>
+                        </td>
+                        {% else %}
+                            <th scope="col">Instaliran</th>
+                        {% endif %}
+                    </tr>
+                    {% set inc = inc + 1 %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        </div>
 {% endblock %}
 

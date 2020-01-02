@@ -20,6 +20,7 @@
             <td>{{ vlasnik.nazivVlasnika }}</td>
             <td>{{ vlasnik.kontaktBroj }}</td>
             <td>{{ vlasnik.email }}</td>
+            {% if is_granted('ROLE_ADMIN') %}
             <td class="text-right">
                 <div class="item-actions">
                     <a href="{{ path('vlasnik_edit', {vlasnikId: vlasnik.vlasnikId}) }}" class="btn btn-sm btn-success">
@@ -31,6 +32,7 @@
                     {{ include('entitiesActions/deleteVlasnik.html.twig', {vlasnik: vlasnik}, with_context = false) }}
                 </div>
             </td>
+            {% endif %}
         </tr>
         </tbody>
     </table>

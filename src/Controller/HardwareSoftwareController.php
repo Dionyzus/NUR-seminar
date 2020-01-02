@@ -1,7 +1,12 @@
 <?php
+
 namespace App\Controller;
 
+use App\Entity\Hardware;
 use App\Entity\HardwareSoftware;
+use App\Entity\Software;
+use App\Entity\Specijalizacija;
+use App\Form\AssignSoftwareToHardware;
 use App\Form\EditSoftwareHardwareFormType;
 use App\Form\HardwareSoftwareFormType;
 use App\Repository\HardwareRepository;
@@ -22,7 +27,7 @@ class HardwareSoftwareController extends AbstractController
     /**
      * Creates a new HardwareSoftware entity.
      *
-     * @Route("/app/hw_sw/novi", methods={"GET", "POST"}, name="hardware_software")
+     * @Route("/app/hw_sw/novi", methods={"GET", "POST"}, name="hardware_software_novi")
      *
      */
     public function new(Request $request): Response
@@ -40,18 +45,18 @@ class HardwareSoftwareController extends AbstractController
             $this->addFlash('success', 'Software uspjesno instaliran na hardware!');
 
             return $this->redirectToRoute('app_index');
-        }
+       }
 
         return $this->render('entitiesAdd/hardwareSoftware.html.twig', [
             'hw_sw' => $hw_sw,
-            'form' => $form->createView(),
-        ]);
+           'form' => $form->createView(),
+       ]);
     }
 
     /**
      * @Route("/app/hw_sw/index",name="hw_sw_index")
      */
-    public function index(Request $request, HardwareSoftwareRepository $hardwareSoftwareRepo, SoftwareRepository $softwareRepo, HardwareRepository $hardwareRepo)
+    public function index(HardwareSoftwareRepository $hardwareSoftwareRepo, SoftwareRepository $softwareRepo, HardwareRepository $hardwareRepo)
     {
         $hardwareSoftwares = $hardwareSoftwareRepo->findAll();
         $softwares = array();
@@ -68,77 +73,122 @@ class HardwareSoftwareController extends AbstractController
             $hardware = $hardwareRepo->find($id);
             $hardwareNames[] = $hardware;
         }
-        return $this->render('entitiesShow/indexHardwareSoftware.html.twig', ['hardwareSoftwares' => $hardwareSoftwares, 'softwares' => $softwares,'hardwares'=>$hardwareNames]);
+
+        return $this->render('entitiesShow/indexHardwareSoftware.html.twig', ['hardwareSoftwares' => $hardwareSoftwares, 'softwares' => $softwares, 'hardwares' => $hardwareNames]);
     }
 
     /**
      * @Route("/app/hw_sw/{brojInventara}/show", methods={"GET", "POST"}, name="hw_sw_show")
      */
-    public function show(Request $request, HardwareSoftwareRepository $hwSwRepo,HardwareSoftware $hwSw,SoftwareRepository $softwareRepo, HardwareRepository $hardwareRepo): Response
+    public function show(HardwareSoftwareRepository $hwSwRepo, HardwareRepository $hwRepo,$brojInventara): Response
     {
-        $softwareHardware = $hwSwRepo->findSoftwareHardware($hwSw->getBrojInventara());
-        $softwares = array();
+        $doctrine = $this->getDoctrine();
+        $softwares = $doctrine
+            ->getRepository(Software::class)
+            ->findAll();
 
-        for ($i = 0; $i <= sizeof($softwareHardware) - 1; $i++) {
-            $id = $softwareHardware[$i]->getSifraSoftware();
-            $software = $softwareRepo->find($id);
-            $softwares[] = $software;
+        $hardware = $hwRepo->find($brojInventara);
+        $assignedSoftware = $hwSwRepo->findSoftwareAssignedToHardware($brojInventara);
+
+        $assignedSoftware = array_map(function ($row) {
+            return $row->getSifraSoftware();
+        }, $assignedSoftware);
+
+        $result = array_diff($softwares, $assignedSoftware);
+
+        $softwareNazivi = array();
+        for ($x = 0; $x <= sizeof($assignedSoftware) - 1; $x++) {
+            $software = $doctrine->getRepository(Software::class)->find($assignedSoftware[$x]);
+            $softwareNazivi[] = $software->getNazivSoftware();
         }
 
-        $id = $softwareHardware[0]->getBrojInventara();
-        $hardware = $hardwareRepo->find($id);
-
-
         return $this->render("entitiesShow/showHardwareSoftware.html.twig", [
-            'hardware' => $hwSw,
+            'hardware' => $hardware,
             'softwares' => $softwares,
-            'hardwareName'=>$hardware,
+            "assignedSoftware" => $assignedSoftware,
+            "unassignedSoftware" => $result,
+            "nazivi" => $softwareNazivi
         ]);
     }
 
     /**
      * Displays a form to edit an existing HardwareSoftware entity.
-     * @Route("/app/hw_sw/{brojInventara}/hw_swEdit",methods={"GET", "POST"}, name="hw_sw_edit")
+     * @Route("/app/hw_sw/{brojInventara}/hw_swEdit/{sifraSoftware}",methods={"GET", "POST"}, name="hw_sw_edit")
      */
-    public function edit(Request $request, HardwareSoftware $hardwareSoftware,HardwareRepository $hardwareRepo): Response
+    public function edit(Request $request, $brojInventara, $sifraSoftware): Response
     {
-        $form = $this->createForm(EditSoftwareHardwareFormType::class, $hardwareSoftware);
+        $doctrine = $this->getDoctrine();
+        $hardware = $doctrine->getRepository(Hardware::class)->find($brojInventara);
+        $software = $doctrine->getRepository(Software::class)->find($sifraSoftware);
+
+        $hw_sw = new HardwareSoftware();
+        $hw_sw
+            ->setBrojInventara($brojInventara)
+            ->setSifraSoftware($sifraSoftware);
+
+        $form = $this->createForm(AssignSoftwareToHardware::class, $hw_sw);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em = $doctrine->getManager();
+            $em->persist($hw_sw);
+            $em->flush();
 
             $this->addFlash('success', 'Softver instaliran na hardveru uspješno!');
 
-            return $this->redirectToRoute('app_index');
+            return $this->redirectToRoute('hw_sw_show', [
+                'brojInventara' => $brojInventara,
+            ]);
         }
 
-        $id = $hardwareSoftware->getBrojInventara();
-        $hardware = $hardwareRepo->find($id);
-
         return $this->render('entitiesActions/editHardwareSoftware.html.twig', [
-            'hardwareSoftware' => $hardwareSoftware,
-            'hardware'=>$hardware,
+            'hardwareSoftware' => $hw_sw,
             'form' => $form->createView(),
+            'hardware'=>$hardware,
+            'software'=>$software
         ]);
     }
 
     /**
-     * Deletes a HardwareSoftware entity.
-     * @Route("/app/hw_sw/{brojInventara}/delete", methods={"GET", "POST"}, name="hw_sw_delete")
+     * @Route("/app/hw_sw/{brojInventara}/assign/{sifraSoftware}", name="hardware_software")
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function delete(HardwareSoftware $hardwareSoftware): Response
+    public function assign($brojInventara, $sifraSoftware)
     {
-        //if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-        //return $this->redirectToRoute('homepage');
-        //}
+        $doctrine = $this->getDoctrine();
 
-        $em = $this->getDoctrine()->getManager();
+        $hardware = $doctrine->getRepository(Hardware::class)->find($brojInventara);
+        $hardware->getBrojInventara();
+        $software = $doctrine->getRepository(Software::class)->find($sifraSoftware);
+        $software->getSifraSoftware();
+
+
+        return $this->redirectToRoute('hw_sw_edit', [
+            'brojInventara' => $hardware,
+            'sifraSoftware' => $software
+        ]);
+    }
+
+    /**
+     * @Route("/app/hw_sw/{brojInventara}/unassign/{sifraSoftware}", name="hw_sw_unassign")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function unassign($brojInventara, $sifraSoftware)
+    {
+        $doctrine = $this->getDoctrine();
+        $hardware = $doctrine->getRepository(Hardware::class)->find($brojInventara);
+
+        $hardwareSoftware = $doctrine->getRepository(HardwareSoftware::class)->findOneBy(['brojInventara' => $brojInventara, 'sifraSoftware' => $sifraSoftware]);
+
+        $em = $doctrine->getManager();
         $em->remove($hardwareSoftware);
+        $em->persist($hardware);
         $em->flush();
 
-        $this->addFlash('success', 'Hardver i svi softveri na istoj izbrisani uspješno!');
+        $this->addFlash('success', 'Softver uspjesno izbrisan s hardvera!');
 
-        return $this->redirectToRoute('app_index');
+        return $this->redirectToRoute('hw_sw_show', [
+            'brojInventara' => $brojInventara,
+        ]);
     }
 }

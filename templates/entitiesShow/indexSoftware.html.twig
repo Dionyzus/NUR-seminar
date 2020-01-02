@@ -44,9 +44,11 @@
                         <a href="{{ path('software_show', {sifraSoftware: software.sifraSoftware}) }}" class="btn btn-sm btn-info">
                             <i class="fa fa-eye" aria-hidden="true"></i> {{ 'prikazi' }}
                         </a>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('software_edit', {sifraSoftware: software.sifraSoftware}) }}" class="btn btn-sm btn-primary">
                             <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
                         </a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -57,11 +59,14 @@
         {% endfor %}
         </tbody>
     </table>
+    {{ knp_pagination_render(pagination) }}
+    {% if is_granted('ROLE_ADMIN') %}
     <div class="section actions">
         <a href="{{ path('software_novi') }}" class="btn btn-bg btn-dark">
             <i class="fa fa-plus" aria-hidden="true"></i> {{ 'dodaj novi' }}
         </a>
     </div>
+    {% endif %}
     <br>
 {% endblock %}
 

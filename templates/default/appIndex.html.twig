@@ -8,134 +8,224 @@
             <h3>{{ 'Welcome! ' }}<b>{{ user.email }}</b></h3>
         </div>
     </div>
-    <table class="table table-striped table-dark">
-        <thead>
-        <tr>
-            <th scope="col">Entiteti</th>
-            <th scope="col">Dodaj novi element</th>
-            <th scope="col">Prikazi vrijednosti</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="row">Lokacija</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('lokacija_nova') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('lokacija_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Vlasnik</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('vlasnik_novi') }}">
-                    <i class="fa fa-list-ul" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('vlasnik_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Softver</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('software_novi') }}">
-                    <i class="fa fa-list" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('software_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Hardver</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('hardware_novi') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('hardware_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Kategorija</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('kategorija_nova') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('kategorija_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Ustanova</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('ustanova_nova') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('ustanova_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Organizacija</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('ustanova_nova') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('organizacija_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Namjena</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('namjena_nova') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('namjena_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Specijalizacija</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_nova') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Hardver-Softver</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('hardware_software') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Instaliraj' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('hw_sw_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        <tr>
-            <th scope="row">Lokacija-Specijalizacija</th>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('lokacija_specijalizacija') }}">
-                    <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Pridruzi' }}
-                </a></td>
-            <td><a class="btn btn-primary btn-sm" href="{{ path('lok_spec_index') }}">
-                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
-                </a></td>
-        </tr>
-        </tbody>
-    </table>
+    {% if is_granted('ROLE_ADMIN') %}
+        <table class="table table-striped table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Entiteti</th>
+                <th scope="col">Dodaj novi element</th>
+                <th scope="col">Prikazi vrijednosti</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-map-marker"></i>Lokacija</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('lokacija_nova') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('lokacija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-user"></i>Vlasnik</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('vlasnik_novi') }}">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('vlasnik_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-list-alt"></i>Softver</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('software_novi') }}">
+                        <i class="fa fa-list" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('software_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-hdd"></i>Hardver</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('hardware_novi') }}">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('hardware_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-tasks"></i>Kategorija</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('kategorija_nova') }}">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('kategorija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-home"></i>Ustanova</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('ustanova_nova') }}">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('ustanova_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-tent"></i>Organizacija</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('ustanova_nova') }}">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('organizacija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-question-sign"></i>Namjena</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('namjena_nova') }}">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('namjena_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-info-sign"></i>Specijalizacija</th>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_nova') }}">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> {{ 'Dodaj' }}
+                    </a></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-flash"></i>Hardver-Softver</th>
+                <td></td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('hw_sw_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-wrench"></i>Lokacija-Specijalizacija</th>
+                <td>
+                   </td>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('lok_spec_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
     <br>
+
+    {% if not is_granted('ROLE_ADMIN') %}
+        <table class="table table-striped table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Entiteti</th>
+                <th scope="col">Prikazi vrijednosti</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-map-marker"></i>Lokacija</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('lokacija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-user"></i>Vlasnik</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('vlasnik_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-list-alt"></i>Softver</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('software_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-hdd"></i>Hardver</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('hardware_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-tasks"></i>Kategorija</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('kategorija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-home"></i>Ustanova</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('ustanova_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-tent"></i>Organizacija</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('organizacija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-question-sign"></i>Namjena</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('namjena_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-info-sign"></i>Specijalizacija</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('specijalizacija_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-flash"></i>Hardver-Softver</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('hw_sw_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="glyphicon glyphicon-wrench"></i>Lokacija-Specijalizacija</th>
+                <td><a class="btn btn-primary btn-sm" href="{{ path('lok_spec_index') }}">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Prikazi' }}
+                    </a></td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    <br>
+{% endblock %}
+
+{% block sidebar %}
+    {{ parent() }}
+    <div class="alert alert-info" role="alert">
+        <h7>Pretraži hardware i software na lokaciji</h7>
+    </div>
+    <form method="post">
+        <div class="input-group mb-3">
+            {{ form_start(form) }}
+            {{ form_row(form.brojUcionice) }}
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i> {{ "Run query" }}
+            </button>
+            {{ form_end(form) }}
+        </div>
+    </form>
 
 {% endblock %}
 
-    {% block sidebar %}
-        <p><br></p>
-        {{ parent() }}
 
-    {% endblock %}
 

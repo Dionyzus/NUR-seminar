@@ -18,20 +18,24 @@
         </thead>
         <tbody>
         <tr>
-            <td>{{ lokacija.opis}}</td>
+            <td>{{ lokacija.opis }}</td>
             <td>{{ lokacija.ustanova.nazivUstanove }}</td>
             <td>{{ lokacija.organizacija.nazivOrganizacije }}</td>
             <td>{{ lokacija.namjena.nazivNamjene }}</td>
             <td class="text-right">
                 <div class="item-actions">
-                    <a href="{{ path('lokacija_edit', {brojUcionice: lokacija.brojUcionice}) }}" class="btn btn-sm btn-success">
-                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
-                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('lokacija_edit', {brojUcionice: lokacija.brojUcionice}) }}"
+                           class="btn btn-sm btn-success">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'uredi' }}
+                        </a>
+                        {{ include('entitiesActions/deleteLokacija.html.twig', {lokacija: lokacija}, with_context = false) }}
+                    {% endif %}
                 </div>
-                <br>
-                <div class="section">
-                    {{ include('entitiesActions/deleteLokacija.html.twig', {lokacija: lokacija}, with_context = false) }}
-                </div>
+                <a href="{{ path('lok_spec_show', {ucionicaBroj: lokacija.brojUcionice}) }}"
+                   class="btn btn-sm btn-info">
+                    <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Pregled specijalizacija za lokaciju' }}
+                </a>
             </td>
         </tr>
         </tbody>
